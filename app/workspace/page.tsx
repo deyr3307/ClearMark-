@@ -262,7 +262,7 @@ export default function Workspace() {
             console.error("Server Error:", error);
                     }
         
-          }
+          
 
         setItems(prev => prev.map((item, index) =>
   index === i ? { ...item, status: 'completed', progress: 100 } : item
