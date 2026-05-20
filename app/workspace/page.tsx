@@ -239,8 +239,7 @@ export default function Workspace() {
               index === i ? { ...item, status: 'processing', progress: 0, errorMessage: undefined } : item
           ));
 
-          const shouldFail = Math.random() > 0.7; // 30% chance to fail
-          let hasError = false;
+          
 
           // Simulate progress for individual file
                     try {
@@ -265,11 +264,10 @@ export default function Workspace() {
         
           }
 
-          if (!hasError) {
-              setItems(prev => prev.map((item, index) => 
-                  index === i ? { ...item, status: 'completed', progress: 100 } : item
-              ));
-          }
+        setItems(prev => prev.map((item, index) =>
+  index === i ? { ...item, status: 'completed', progress: 100 } : item
+));
+      
       }
     }
     
