@@ -243,20 +243,26 @@ export default function Workspace() {
           let hasError = false;
 
           // Simulate progress for individual file
-          for(let p = 0; p <= 100; p += 10) {
-              await new Promise(resolve => setTimeout(resolve, 150));
-              
-              if (shouldFail && p === 60) {
-                  hasError = true;
-                  setItems(prev => prev.map((item, index) => 
-                      index === i ? { ...item, status: 'error', errorMessage: 'Processing failed: Invalid format or corrupted data.' } : item
-                  ));
-                  break;
-              } else {
-                  setItems(prev => prev.map((item, index) => 
-                      index === i ? { ...item, progress: p } : item
-                  ));
-              }
+                    try {
+            const formData = new FormData();
+            formData.append("file", items[i].file);
+
+            const response = await fetch("https://clearmark-server.onrender.com/remove-watermark/", {
+              method: "POST",
+              body: formData
+            });
+
+            if (response.ok) {
+              const resultBlob = await response.blob();
+              const cleanFile = new File([resultBlob], items[i].file.name, {type: "image/png"});
+              setItems(prev => prev.map((item, index) =>
+                index === i ? { ...item, progress: 100, file: cleanFile } : item
+              ));
+            }
+          } catch (error) {
+            console.error("Server Error:", error);
+                    }
+        
           }
 
           if (!hasError) {
